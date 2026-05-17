@@ -1,9 +1,0 @@
-{
-  id: 29350,
-  accountId: 24444,
-  type: 'Debit',
-  date: '2026-05-17T00:00:00.000Z',
-  amount: 150,
-  description: 'Funds Transfer Sent'
-}
-Schema Validaion Sucessful
