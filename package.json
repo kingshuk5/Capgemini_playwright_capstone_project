@@ -9,7 +9,9 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.8.0"
+    "@types/node": "^25.8.0",
+    "ajv": "^8.20.0",
+    "allure-playwright": "^3.8.0"
   },
   "dependencies": {
     "fast-xml-parser": "^5.8.0"

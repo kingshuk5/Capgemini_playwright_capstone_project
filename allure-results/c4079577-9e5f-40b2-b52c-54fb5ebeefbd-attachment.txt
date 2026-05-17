@@ -1,0 +1,4 @@
+{
+  '?xml': '',
+  account: { id: 35544, customerId: 18983, type: 'CHECKING', balance: 265.5 }
+}

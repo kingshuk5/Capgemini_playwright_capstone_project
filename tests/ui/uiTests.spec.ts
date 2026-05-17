@@ -73,7 +73,7 @@ myTest.describe('ParaBank Fund Transfer UI Tests',()=>{
 
     })
     for(const data of tc01data ){
-    myTest("TC-FT-01",async({page})=>{
+    myTest("@ui TC-FT-01",async({page})=>{
         const home:Homepage=new Homepage(page);
         const fundPage:FundTranserPage=new FundTranserPage(page);
         const assert:assertClass=new assertClass(page);
@@ -122,7 +122,7 @@ myTest.describe('ParaBank Fund Transfer UI Tests',()=>{
         });
     }
     for(const data of tc03data ){
-    myTest("TC-FT-03",async({page})=>{
+    myTest("@ui TC-FT-03",async({page})=>{
         const home:Homepage=new Homepage(page);
         const fundPage:FundTranserPage=new FundTranserPage(page);
         const assert:assertClass=new assertClass(page);
@@ -153,7 +153,7 @@ myTest.describe('ParaBank Fund Transfer UI Tests',()=>{
 
 
 for(const data of tc14data ){
-    myTest("TC-FT-14",async({page})=>{
+    myTest("@ui TC-FT-14",async({page})=>{
         const home:Homepage=new Homepage(page);
         const fundPage:FundTranserPage=new FundTranserPage(page);
         const assert:assertClass=new assertClass(page);
@@ -179,7 +179,7 @@ for(const data of tc14data ){
 }
 
 for(const data of tc23data ){
-    myTest("TC-FT-23",async({page})=>{
+    myTest("@ui TC-FT-23",async({page})=>{
         const home:Homepage=new Homepage(page);
         const fundPage:FundTranserPage=new FundTranserPage(page);
         const assert:assertClass=new assertClass(page);
@@ -224,7 +224,7 @@ const RedirectErrorHeading="Error!"
 const RedirecErrorMsg="An internal error has occurred and has been logged."
 const RedirectLoginHeading="Customer Login"
 
-myTest("TC-FT-22",async({page})=>{
+myTest("@ui TC-FT-22",async({page})=>{
         const home:Homepage=new Homepage(page);
         const assert:assertClass=new assertClass(page);
 

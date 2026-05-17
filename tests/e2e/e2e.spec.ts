@@ -10,6 +10,7 @@ import logindata from '../../test-data/ui-loginDetails-test-data.json';
 import { request } from "@playwright/test";
 import assertClass from "../../utils/assert";
 import e2eTcFt21TestData from '../../test-data/e2e-tcFt21.json';
+import { validateAccountSchema } from "../../utils/schemaValidation";
 
 
 myTest.describe('e2e test cases',()=>{
@@ -26,6 +27,43 @@ myTest.describe('e2e test cases',()=>{
             `
     let baseApi:BaseAPi;
 
+
+    const accountSchema = {
+        type: "object",
+        additionalProperties: true,
+        properties: {
+        account: {
+            type: "object",
+            properties: {
+            id: { type: ["string", "number"] },
+            customerId: { type: ["string", "number"] },
+            type: { type: "string" },
+            balance: { type: ["string", "number"] }
+            },
+            required: ["id", "balance"]
+        }
+        },
+        required: ["account"]
+    };
+
+  const transactionSchema = {
+  type: "object",
+  properties: {
+    id: { type: ["string", "number"] },
+    accountId: { type: ["string", "number"] },
+    type: { 
+      type: "string",
+      enum: ["Debit", "Credit"]
+   },
+        date: { 
+        type: "string",
+    },
+        amount: { type: ["string", "number"] },
+        description: { type: "string" }
+    },
+    required: ["id", "accountId", "type", "amount", "date"]
+    };
+
     myTest.beforeEach('before Each test cases',async ({page,data:fixtureData})=>{
         const loginPage=new LoginPage(page);
         await loginPage.navigateTo(fixtureData.url);
@@ -40,7 +78,7 @@ myTest.describe('e2e test cases',()=>{
     })
 
 for (const data of e2eTcFt20TestData) {
-    myTest("TC-FT-20",async({page,request})=>{
+    myTest("@e2e TC-FT-20",async({page,request})=>{
         const home = new Homepage(page);
         const fund= new FundTranserPage(page);
         const assert= new assertClass(page);
@@ -50,6 +88,14 @@ for (const data of e2eTcFt20TestData) {
 
         const fromObj= parser.parse(await fromAccntBefore.text());
         const toObj= parser.parse(await toAccntBefore.text());
+        console.log(fromObj);
+        
+
+        const isSchemaValid=validateAccountSchema(accountSchema,fromObj);
+        assert.assertMatch(String(isSchemaValid),'true');
+        const isSchemaValid2=validateAccountSchema(accountSchema,toObj);
+        assert.assertMatch(String(isSchemaValid2),'true');
+
 
         const fromBalBefore= parseFloat(fromObj.account.balance);
         const toBalBefore= parseFloat(toObj.account.balance);
@@ -85,7 +131,7 @@ for (const data of e2eTcFt20TestData) {
 
 
 for (const data of e2eTcFt21TestData) {
-    myTest("TC-FT-21",async({page,request})=>{
+    myTest("@e2e TC-FT-21",async({page,request})=>{
         const home = new Homepage(page);
         const fund= new FundTranserPage(page);
         const assert= new assertClass(page);
@@ -95,6 +141,12 @@ for (const data of e2eTcFt21TestData) {
 
         const fromObj= parser.parse(await fromAccntBefore.text());
         const toObj= parser.parse(await toAccntBefore.text());
+
+        const isSchemaValid=validateAccountSchema(accountSchema,fromObj);
+        assert.assertMatch(String(isSchemaValid),'true');
+        const isSchemaValid2=validateAccountSchema(accountSchema,toObj);
+        assert.assertMatch(String(isSchemaValid2),'true');
+
 
         const fromBalBefore=fromObj.account.balance;
         const toBalBefore= toObj.account.balance;

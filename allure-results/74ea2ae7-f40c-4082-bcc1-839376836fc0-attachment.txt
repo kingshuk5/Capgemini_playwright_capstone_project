@@ -1,0 +1,9 @@
+{ '?xml': '', transactions: { transaction: [ [Object], [Object] ] } }
+{
+  id: 59542,
+  accountId: 35544,
+  type: 'Debit',
+  date: '2026-05-17T00:00:00.000Z',
+  amount: 150,
+  description: 'Funds Transfer Sent'
+}

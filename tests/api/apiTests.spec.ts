@@ -4,10 +4,49 @@ import LoginPage from '../../pages/loginpage';
 import { XMLParser } from 'fast-xml-parser';
 import assertClass from '../../utils/assert';
 import { BaseAPi } from '../../basepage/baseApi';
+import { validateAccountSchema } from '../../utils/schemaValidation';
 
 
 
 import apiTestData from '../../test-data/api-test-data.json';
+
+const accountSchema = {
+    type: "object",
+    properties: {
+      account: {
+        type: "object",
+        properties: {
+          id: { type: ["string", "number"] },
+          customerId: { type: ["string", "number"] },
+          type: { type: "string" },
+          balance: { type: ["string", "number"] }
+        },
+        required: ["id", "balance"]
+      }
+    },
+    required: ["account"]
+  };
+
+  const transactionSchema = {
+  type: "object",
+  properties: {
+    id: { type: ["string", "number"] },
+    accountId: { type: ["string", "number"] },
+    type: { 
+      type: "string",
+      enum: ["Debit", "Credit"]
+   },
+    date: { 
+      type: "string",
+   },
+    amount: { type: ["string", "number"] },
+    description: { type: "string" }
+  },
+  required: ["id", "accountId", "type", "amount", "date"]
+};
+
+
+
 
 myTest.describe('API Tests', () => {
 
@@ -18,8 +57,6 @@ myTest.describe('API Tests', () => {
     myTest.beforeEach('before each hook', async () => {
         baseApi=new BaseAPi();
         await baseApi.init();
-        // const loginPage = new LoginPage(page);
-        // await loginPage.navigateTo(data.url);
         
     });
 
@@ -29,13 +66,14 @@ myTest.describe('API Tests', () => {
     });
 
 for (const data of apiTestData) {
-    myTest("TC-FT-16", async ({ request }) => {
+    myTest("@api TC-FT-16", async ({ request }) => {
         const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions`);
         assertClass.verifyStatusCOde(response,200);
         
         const xmlText=await response.text();
-        // const parser=new XMLParser();
         const jsonObj=parser.parse(xmlText);
+        // console.log(jsonObj);
+        
 
 
         const List = jsonObj.transactions.transaction;
@@ -43,7 +81,11 @@ for (const data of apiTestData) {
         const transactions =List;
         const lastIndex=transactions.length-1
         const lastTransaction = transactions[lastIndex];
-        // console.log(lastTransaction);
+        console.log(lastTransaction);
+
+        const isSchemaValid=validateAccountSchema(transactionSchema,lastTransaction);
+        expect(isSchemaValid).toBe(true);
+
         
         transactionid=lastTransaction.id;
 
@@ -56,13 +98,18 @@ for (const data of apiTestData) {
 }
 
 for (const data of apiTestData) {
-    myTest("TC-FT-17", async ({ request }) => {
+    myTest("@api TC-FT-17", async ({ request }) => {
         const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}`);
         assertClass.verifyStatusCOde(response,200);
         
         const xmlText = await response.text();
         
         const jsonObj = parser.parse(xmlText);
+        
+        console.log(jsonObj);
+
+        const isSchemaValid=validateAccountSchema(accountSchema,jsonObj);
+        expect(isSchemaValid).toBe(true);
         
         const accountData = jsonObj.account;
         // console.log(accountData.balance);
@@ -73,7 +120,7 @@ for (const data of apiTestData) {
 }
 
 for (const data of apiTestData) {
-    myTest("TC-FT-18",async({request})=>{
+    myTest("@api TC-FT-18",async({request})=>{
         const response1=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions`);
         assertClass.verifyStatusCOde(response1,200);
         
@@ -85,6 +132,10 @@ for (const data of apiTestData) {
         const transactions =List;
         const lastIndex=transactions.length-1
         const lastTransaction = transactions[lastIndex];
+
+        const isSchemaValid=validateAccountSchema(transactionSchema,lastTransaction);
+        expect(isSchemaValid).toBe(true);
+        
         // console.log(lastTransaction);
         transactionid=Number(lastTransaction.id);
         // console.log(transactionid);
@@ -105,7 +156,7 @@ for (const data of apiTestData) {
 }
 
 for (const data of apiTestData) {
-    myTest("TC-FT-19", async ({ request }) => {
+    myTest("@api TC-FT-19", async ({ request }) => {
         const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions/amount/${data.transferAmount}`);
         expect(response.status()).toBe(200);
         
