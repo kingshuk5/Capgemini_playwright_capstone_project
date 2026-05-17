@@ -1,0 +1,15 @@
+[
+
+    { 
+    "id": "TC-FT-02", 
+    "amount": "75.00", 
+    "fromAccount": "14787", 
+    "toAccount": "14898"
+    },
+    { 
+    "id": "TC-FT-04", 
+    "amount": "50.50", 
+    "fromAccount": "14787", 
+    "toAccount": "14898" 
+    }
+]
