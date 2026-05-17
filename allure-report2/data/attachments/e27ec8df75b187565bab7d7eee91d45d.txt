@@ -1,0 +1,6 @@
+{
+  '?xml': '',
+  account: { id: 16341, customerId: 12545, type: 'SAVINGS', balance: -3900 }
+}
+Schema Validaion Sucessful
+Schema Validaion Sucessful
