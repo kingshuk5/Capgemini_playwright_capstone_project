@@ -159,7 +159,9 @@ for(const data of tc14data ){
         const assert:assertClass=new assertClass(page);
         const overview:accountOverviewPage=new accountOverviewPage(page);
 
-                      
+        await home.clickOverView();
+        const beforeBal= await overview.getAccountBalance(data.fromAccount);  
+
         await home.clickTransferFunds();
         await fundPage.enterAmount(data.amount);
         await fundPage.selectFromAccount(data.fromAccount);
@@ -170,10 +172,12 @@ for(const data of tc14data ){
 
         await home.clickOverView();
 
-        const afterBal=await overview.getAccountBalance(data.fromAccount);
+        const afterBal=Number(await overview.getAccountBalance(data.fromAccount));
+
+        const bal=Number(beforeBal)-Number(data.amount)
 
         await assert.assertAmmount(confirmationAmmount,"100.00");
-        await assert.assertMatch("0.00",afterBal);
+        await assert.assertMatch(String(bal),String(afterBal));
         
     })
 }
