@@ -76,6 +76,10 @@ export default defineConfig({
 
   // to clean allure results
   //Remove-Item -Recurse -Force allure-results
+  //to generate
+
+  //npx allure generate allure-results -o allure-report 
+  //npx allure open allure-report                           
 
 
 
