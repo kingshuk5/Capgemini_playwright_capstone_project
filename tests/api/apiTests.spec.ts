@@ -11,6 +11,7 @@ import apiTestData from '../../test-data/api-test-data.json';
 
 myTest.describe('API Tests', () => {
 
+    const parser=new XMLParser();
     let baseApi:BaseAPi;
     let transactionid=0;
 
@@ -27,12 +28,13 @@ myTest.describe('API Tests', () => {
         await baseApi.dispose();
     });
 
+for (const data of apiTestData) {
     myTest("TC-FT-16", async ({ request }) => {
-        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${apiTestData.accountId}/transactions`);
+        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions`);
         assertClass.verifyStatusCOde(response,200);
         
         const xmlText=await response.text();
-        const parser=new XMLParser();
+        // const parser=new XMLParser();
         const jsonObj=parser.parse(xmlText);
 
 
@@ -49,16 +51,17 @@ myTest.describe('API Tests', () => {
         
         
         assertClass.assertApiData(lastTransaction.type,'Debit');
-        assertClass.assertApiData(String(lastTransaction.amount),apiTestData.transferAmount);        
+        assertClass.assertApiData(String(lastTransaction.amount),data.transferAmount);        
     });
+}
 
+for (const data of apiTestData) {
     myTest("TC-FT-17", async ({ request }) => {
-        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${apiTestData.accountId}`);
+        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}`);
         assertClass.verifyStatusCOde(response,200);
         
         const xmlText = await response.text();
         
-        const parser = new XMLParser();
         const jsonObj = parser.parse(xmlText);
         
         const accountData = jsonObj.account;
@@ -67,13 +70,14 @@ myTest.describe('API Tests', () => {
         expect(accountData).toHaveProperty('balance');
         expect(parseFloat(accountData.balance)).not.toBeNaN();
     });
+}
 
+for (const data of apiTestData) {
     myTest("TC-FT-18",async({request})=>{
-        const response1=await baseApi.getFunc(`/parabank/services/bank/accounts/${apiTestData.accountId}/transactions`);
+        const response1=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions`);
         assertClass.verifyStatusCOde(response1,200);
         
         const xmlText=await response1.text();
-        const parser=new XMLParser();
         const jsonObj=parser.parse(xmlText);
 
 
@@ -95,15 +99,16 @@ myTest.describe('API Tests', () => {
         const transDetails=jsonObj2.transaction;
                 
         assertClass.assertApiData(transDetails.type,'Debit');
-        assertClass.assertApiData(String(transDetails.amount),apiTestData.transferAmount);        
+        assertClass.assertApiData(String(transDetails.amount),data.transferAmount);        
 
     })
+}
 
+for (const data of apiTestData) {
     myTest("TC-FT-19", async ({ request }) => {
-        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${apiTestData.accountId}/transactions/amount/${apiTestData.transferAmount}`);
+        const response=await baseApi.getFunc(`/parabank/services/bank/accounts/${data.accountId}/transactions/amount/${data.transferAmount}`);
         expect(response.status()).toBe(200);
         
-        const parser= new XMLParser();
         const xmlText = await response.text();
         const jsonObj = parser.parse(xmlText);
         
@@ -113,8 +118,9 @@ myTest.describe('API Tests', () => {
         // console.log(arrayList);
 
         for (const transaction of arrayList) {
-            assertClass.assertApiData(String(transaction.amount),apiTestData.transferAmount);
+            assertClass.assertApiData(String(transaction.amount),data.transferAmount);
         }
     });
+}
     
 });
