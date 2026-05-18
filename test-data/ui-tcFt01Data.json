@@ -1,8 +1,8 @@
 [
       { 
             "amount": "100",   
-            "fromAccount": "13788", 
-            "toAccount": "13566" 
+            "fromAccount": "13566", 
+            "toAccount": "13788" 
       }
 
 ]
